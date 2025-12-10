@@ -1,8 +1,5 @@
 BLOQUE 0 · Carga de datos y pre-procesamiento mínimo:
 
-Una señal de PCG  x[n] suele estar en rango 
-[−1,1] o  [−!32768,32767] si es entero. Para análisis robusto conviene trabajar en mono y en un rango normalizado. Usaremos una ventana corta (p. ej., 2 s) para visualizar con claridad.
-
 Código en Matlab:
 
 clear; 
