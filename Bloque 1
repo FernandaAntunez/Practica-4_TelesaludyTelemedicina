@@ -1,0 +1,15 @@
+Bloque 1. Entropía de Shannon normalizada (envolvente básica).
+Teoría (con ecuaciones) Sea la señal x[n] y su magnitud s[n]=|x[n]|. Definimos una probabilidad instantánea normalizada:p[n];=;s[n]maxks[k]+ε;;∈[0,1] donde ε evita división por cero.
+La energía/entropía de Shannon puntual (forma habitual en PCG) puede escribirse como: E[n];=;−,p[n];logb!(p[n]+ε) con base b=e o b=10. Después estandarizamos y normalizamos [0,1] para obtener una envolvente más estable.
+
+Código en Matlab:
+% === 1.1 Probabilidad normalizada p[n] ===
+p = abs(x);
+p = p ./ max(eps, max(p));
+
+% === 1.2 Entropía/energía de Shannon puntual (log10) ===
+E = -p .* log10(p + eps);     % variante equivalente a -|x|log|x|
+
+% === 1.3 Estandarización y normalización a [0,1] ===
+E_z  = (E - mean(E)) / (std(E) + eps);
+Env0 = (E_z - min(E_z)) / max(eps, (max(E_z) - min(E_z)));   % envolvente base [0,1]
