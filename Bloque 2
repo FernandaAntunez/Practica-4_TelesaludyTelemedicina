@@ -1,0 +1,25 @@
+BLOQUE 2 · Suavizado de la envolvente (pasa-bajas)
+El corazón late ~1–2 Hz; S1 y S2 están separados por el silencio sistólico/diastólico. El suavizado pasa-bajas sobre la envolvente (no sobre x[n]) elimina fluctuaciones espurias y resalta la morfología de ciclo. Un Butterworth de 4º orden con fc≈8–12,Hz funciona bien.
+
+Código en Matlab:
+% === 2.1 LPF sobre la envolvente (no sobre x) ===
+fc = 10;                                         % corte ~10 Hz
+[b,a] = butter(4, fc/(fs/2), 'low');
+Env = filtfilt(b, a, Env0);
+
+% === 2.2 Normalización final a [0,1] ===
+Env = (Env - min(Env)) / max(eps, (max(Env) - min(Env)));
+
+% Visual rápido
+figure('Name','Señal & Envolvente (Shannon LPF)');
+subplot(2,1,1); 
+plot(t, x, 'k'); 
+grid on;
+title('Señal PCG (normalizada)'); 
+xlabel('Tiempo (s)'); ylabel('Amplitud');
+subplot(2,1,2); 
+plot(t, Env, 'b'); 
+grid on;
+title('Envolvente de Shannon (LPF)'); 
+xlabel('Tiempo (s)'); 
+ylabel('Amplitud norm.');
