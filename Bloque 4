@@ -1,0 +1,38 @@
+BLOQUE 4 · Tripletes mín–máx–mín y área del triángulo
+
+Un evento S1 o S2 suele coincidir con un máximo flanqueado por mínimos en la envolvente. Modelamos cada candidato como un triángulo en el plano (tiempo, amplitud) con vértices (t1, y1), (t2,y2), (t3,y3). 
+
+Código:
+% === 4.1 Construcción de tripletes mín–máx–mín ===
+tri_samp = []; 
+tri_time = []; 
+tri_amp = [];
+for k = 1:length(tipo)-2
+    if tipo(k)==1 && tipo(k+1)==2 && tipo(k+2)==1
+        i1 = idx_ext(k); i2 = idx_ext(k+1); i3 = idx_ext(k+2);
+        tri_samp(end+1,:) = [i1,i2,i3];                  %#ok<SAGROW>
+        tri_time(end+1,:) = [t(i1), t(i2), t(i3)];       %#ok<SAGROW>
+        tri_amp(end+1,:)  = [Env(i1), Env(i2), Env(i3)]; %#ok<SAGROW>
+    end
+end
+
+% === 4.2 Área de cada triángulo ===
+areas = zeros(size(tri_time,1),1);
+for i = 1:size(tri_time,1)
+    x1=tri_time(i,1); y1=tri_amp(i,1);
+    x2=tri_time(i,2); y2=tri_amp(i,2);
+    x3=tri_time(i,3); y3=tri_amp(i,3);
+    areas(i) = 0.5 * abs( x1*(y2-y3) + x2*(y3-y1) + x3*(y1-y2) );
+end
+
+% Visual
+figure('Name','Triángulos mín–máx–mín');
+plot(t, Env, 'g', 'LineWidth', 1.2); hold on; grid on;
+for i = 1:size(tri_time,1)
+    tx = [tri_time(i,:), tri_time(i,1)];
+    ty = [tri_amp(i,:),  tri_amp(i,1)];
+    plot(tx, ty, 'r-', 'LineWidth', 1.0);
+end
+plot(t(idx_ext), Env(idx_ext), 'ko', 'MarkerSize', 4);
+xlabel('Tiempo (s)'); ylabel('Amplitud norm.');
+title('Envolvente y triángulos candidatos');
