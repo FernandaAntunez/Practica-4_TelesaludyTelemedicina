@@ -1,0 +1,28 @@
+BLOQUE 3 · Extremos locales vía derivada (mínimos y máximos)
+Con la envolvente 
+Env[n], calculamos la derivada discreta d[n]=Env[n]−Env[n−1]. Un cambio de signo en d[n] localiza mínimos (d[n]!<!0 y d[n+1]!>!0) y máximos (d[n]!>!0 y d[n+1]!<!0.
+
+Código:
+% === 3.1 Derivada discreta y detección de cambios de signo ===
+d = diff(Env);
+idx_ext = []; 
+tipo = [];  % tipo: 1 = min, 2 = max
+
+for i = 1:length(d)-1
+    if d(i) < 0 && d(i+1) > 0
+        idx_ext(end+1) = i+1; tipo(end+1) = 1;  % mínimo
+    elseif d(i) > 0 && d(i+1) < 0
+        idx_ext(end+1) = i+1; tipo(end+1) = 2;  % máximo
+    end
+end
+
+% Visual
+figure('Name','Envolvente con min/máx');
+plot(t, Env, 'b'); 
+hold on; 
+grid on;
+plot(t(idx_ext(tipo==1)), Env(idx_ext(tipo==1)), 'go', 'DisplayName','Mínimos');
+plot(t(idx_ext(tipo==2)), Env(idx_ext(tipo==2)), 'ro', 'DisplayName','Máximos');
+legend; 
+xlabel('Tiempo (s)'); ylabel('Amplitud norm.');
+title('Extremos locales sobre la envolvente');
