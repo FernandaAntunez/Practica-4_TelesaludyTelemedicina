@@ -283,59 +283,14 @@ disp('>> Segmentación completada. Guardado: resultados_segmentacion.mat');
 ## Experimentos
 
 1. Repite con **3 audios** (normal + patológicos).
-<p align="center">
-  <img src="imagenes/p11.jpg" alt="Normal" width="800">
-  <img src="imagenes/p12.jpg" alt="Normal" width="800">
-  <img src="imagenes/p13.jpg" alt="Normal" width="800">
-</p>
-<p align="center"><em>Figura 1. Señal normal </em></p>
-<p align="center">
-  <img src="imagenes/p21.jpg" alt="Soplo" width="800">
-  <img src="imagenes/p22.jpg" alt="Soplo" width="800">
-  <img src="imagenes/p23.jpg" alt="Soplo" width="800">
-</p>
-<p align="center"><em>Figura 2. Señal soplo </em></p>
-<p align="center">
- <img src="imagenes/p31.jpg" alt="Click" width="800">
- <img src="imagenes/p32.jpg" alt="Click" width="800">
- <img src="imagenes/p33.jpg" alt="Click" width="800">
-</p>
-<p align="center"><em>Figura 3. Señal click </em></p>
-
 
 2. Cambia $f_c$ del LPF (8, 10, 12 Hz). ¿Cómo afecta extremos y ciclos?
-<p align="center">
-  <img src="imagenes/p111.jpg" alt="Normal" width="800">
-  <img src="imagenes/p13.jpg" alt="Normal" width="800">
-  <img src="imagenes/p112.jpg" alt="Normal" width="800">
-</p>
-<p align="center"><em>Figura 4. Señal normal a diferentes frecuencias de corte: 8, 10 y 12 </em></p>
-<p align="center">
-  <img src="imagenes/p211.jpg" alt="Soplo" width="800">
-  <img src="imagenes/p23.jpg" alt="Soplo" width="800">
-  <img src="imagenes/p212.jpg" alt="Soplo" width="800">
-</p>
-<p align="center"><em>Figura 5. Señal soplo a diferentes frecuencias de corte: 8, 10 y 12 </em></p>
-<p align="center">
- <img src="imagenes/p311.jpg" alt="Click" width="800">
- <img src="imagenes/p33.jpg" alt="Click" width="800">
- <img src="imagenes/p312.jpg" alt="Click" width="800">
-</p>
-<p align="center"><em>Figura 6. Señal click a diferentes frecuencias de corte: 8, 10 y 12 </em></p>
-Como se puede ver en las gráficas, si fc es baja como en el caso de 8Hz, se pierdes la capacidad de separar ciclos que están juntos. El filtro "fusiona" picos cercanos al eliminar el valle que los separa. Detectarás menos ciclos de los que hay. Por el contrario, si fc es alta como 12Hz, se gana mucho ruido. Cada pico S1 o S2 podría ser detectado como múltiples picos erroneamente, como se puede observar claramente en el caso del click.
+3. 
+4. Cambia la **base del log** (ln vs log10). ¿Diferencias prácticas?
 
-3. Cambia la **base del log** (ln vs log10). ¿Diferencias prácticas?
-<p align="center">
-  <img src="imagenes/p4.jpg" alt="Normal" width="800">
-  <img src="imagenes/p13.jpg" alt="Normal" width="800">
-</p>
-<p align="center"><em>Figura 7. Comparación del uso de ln vs log10 </em></p>
-Mediante las figuras generadas, se puede concluir que la elección entre ln y log10 no afecta la detección de extremos o ciclos. Esto es debido también a que, dado que E_z es idéntico, la envolvente Env0 y la envolvente final Env también serán idénticas.
+5. Agrega opcionalmente un **pasa-bandas 20–400 Hz** **antes** de Shannon si el audio es ruidoso.
+6. Reporta: capturas (envolvente+extremos, triángulos, ciclos), **#ciclos**, **RR medio**, observaciones, falsos ± y cómo los mitigaste.
 
-4. Agrega opcionalmente un **pasa-bandas 20–400 Hz** **antes** de Shannon si el audio es ruidoso.
-5. Reporta: capturas (envolvente+extremos, triángulos, ciclos), **#ciclos**, **RR medio**, observaciones, falsos ± y cómo los mitigaste.
-
-Durante el desarrollo, se presentaron errores y falsos positivos a lo largo del camino, pero se lograron solucionar con la ayuda de la asesoría del profesor. Los falsos positivos se arreglaron al agragar una línea de código que sobreescribe a Amed, haciendo que se multiplique el valor de la amplitud media en factor de 1.5, mejorando la detección efectiva de la amplitud de los ciclos.
 
 ---
 
