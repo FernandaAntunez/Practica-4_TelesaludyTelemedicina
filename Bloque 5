@@ -1,0 +1,108 @@
+BLOQUE 5 · Selección de eventos prominentes y ciclos cardiacos
+
+1. Filtra triángulos por área A>A¯ (umbral simple).
+
+2. Convierte cada triángulo en un ciclo provisional usando [tmin1,,tmin2].
+
+3. Restringe por fisiología:
+   -Intervalo RR ∈[0.3,1.5],s (≈ 40–200 lpm).
+   -Sin solapes.
+
+Código: 
+
+% === 5.1 Selección por área (umbral: promedio) ===
+Amed = mean(areas);
+mask_big = areas > Amed;
+
+% === 5.2 Propuesta de ciclos: [min1, min2] de cada triángulo grande ===
+ciclos_idx = tri_samp(mask_big, [1 3]);  % índices
+ciclos_idx = sortrows(ciclos_idx, 1);
+
+% === 5.3 Limpieza por duración fisiológica y no solape ===
+minRR = round(0.30*fs);   % 0.30 s
+maxRR = round(1.50*fs);   % 1.50 s
+ciclos_ref = [];
+for i = 1:size(ciclos_idx,1)
+    L = ciclos_idx(i,2) - ciclos_idx(i,1);
+    if L >= minRR && L <= maxRR
+        if isempty(ciclos_ref) || ciclos_idx(i,1) > ciclos_ref(end,2)
+            ciclos_ref = [ciclos_ref; ciclos_idx(i,:)]; %#ok<AGROW>
+        end
+    end
+end
+
+
+
+% === 5.4 Visual: sombrear ciclos en la envolvente ===
+figure('Name','Ciclos cardiacos detectados');
+plot(t, Env, 'k'); 
+grid on; 
+hold on;
+for i = 1:size(ciclos_ref,1)
+    i1 = ciclos_ref(i,1); i2 = ciclos_ref(i,2);
+    fill([t(i1) t(i2) t(i2) t(i1)], [0 0 1 1], ...
+         'c', 'FaceAlpha', 0.18, 'EdgeColor','none');
+end
+legend('Envolvente','Ciclos'); xlabel('Tiempo (s)'); ylabel('Amplitud norm.');
+title('Ciclos cardiacos (propuestos)');
+
+% Normal y envolvente
+figure('Name','Original & Envolvente (Sobrepuesta)'); 
+plot(t, x, 'k'); 
+hold on;
+plot(t, Env, 'b');
+grid on;
+title('Señal PCG (Original y Envolvente)'); 
+xlabel('Tiempo (s)'); ylabel('Amplitud');
+
+% Original, envolvente y triángulos máximos con S1 y S2
+figure('Name','Señal Original, envolvente y triángulos máximos');
+plot(t, x, 'k'); 
+hold on;
+grid on;
+plot(t, Env, 'r', 'LineWidth', 1.2); 
+hold on; 
+grid on;
+
+% Identificación S1 y S2 basada en tiempo entre crestas
+colors = {'c','r'};   % S1=cian, S2=rojo
+labels = {'S1','S2'};
+
+big_idx = find(mask_big);                     % índices de triángulos grandes
+peak_times = mean(tri_time(big_idx,:), 2);    % tiempo promedio de cada triángulo
+[peak_times, sort_idx] = sort(peak_times);    % ordenar por tiempo
+big_idx_sorted = big_idx(sort_idx);
+
+prev_time = -Inf;
+cycle_threshold = 0.4;   % ajustar según tu señal (s)
+for j = 1:length(big_idx_sorted)
+    idx = big_idx_sorted(j);
+    
+    % Determinar si es S1 o S2
+    if (peak_times(j) - prev_time) > cycle_threshold
+        color = colors{1};  % S1
+        label = labels{1};
+    else
+        color = colors{2};  % S2
+        label = labels{2};
+    end
+    prev_time = peak_times(j);
+    
+    % Graficar el triángulo
+    tx = [tri_time(idx,:), tri_time(idx,1)];
+    ty = [tri_amp(idx,:), tri_amp(idx,1)];
+    plot(tx, ty, color, 'LineWidth', 1.5);
+    
+    % Etiqueta en la cresta
+    text(peak_times(j), max(tri_amp(idx,:)), label, 'Color', color, ...
+         'FontWeight','bold', 'HorizontalAlignment','center');
+end
+
+% Graficar puntos de máximos externos si los tienes
+plot(t(idx_ext), Env(idx_ext), 'ko', 'MarkerSize', 4);
+
+xlabel('Tiempo (s)'); ylabel('Amplitud norm.');
+title('Envolvente y triángulos candidatos con S1 y S2');
+
+
+
