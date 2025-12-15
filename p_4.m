@@ -4,9 +4,11 @@ clc;
 
 % === 0.1 Leer audio (ajusta la ruta a tus archivos) ===
 % Ejemplos del repositorio de Michigan (cambia por tus rutas):
- % [x, fs] = audioread('09_apex_holo_sys_mur_supine_bell.mp3');
- % [x, fs] = audioread('02_apex_split_s1_supine_bell.mp3');
-  [x, fs] = audioread('07_apex_mid_sys_mur_supine_bell.mp3');
+  %[x, fs] = audioread('09_apex_holo_sys_mur_supine_bell.mp3');
+  % [x, fs] = audioread('02_apex_split_s1_supine_bell.mp3');
+  %[x, fs] = audioread('07_apex_mid_sys_mur_supine_bell.mp3');
+  % [x, fs] = audioread ('01_apex_normal_s1_s2_supine_bell.mp3');
+  %[x, fs] = audioread('10_apex_sys_click__late_sys_mur_lld_bell.mp3');
 
 % === 0.2 Si es estéreo, convertir a mono ===
 if size(x,2) > 1
