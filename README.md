@@ -283,13 +283,10 @@ disp('>> Segmentación completada. Guardado: resultados_segmentacion.mat');
 ## Experimentos
 
 1. Repite con **3 audios** (normal + patológicos).
-
 2. Cambia $f_c$ del LPF (8, 10, 12 Hz). ¿Cómo afecta extremos y ciclos?
-3. 
-4. Cambia la **base del log** (ln vs log10). ¿Diferencias prácticas?
-
-5. Agrega opcionalmente un **pasa-bandas 20–400 Hz** **antes** de Shannon si el audio es ruidoso.
-6. Reporta: capturas (envolvente+extremos, triángulos, ciclos), **#ciclos**, **RR medio**, observaciones, falsos ± y cómo los mitigaste.
+3. Cambia la **base del log** (ln vs log10). ¿Diferencias prácticas?
+4. Agrega opcionalmente un pasa-bandas 20–400 Hz antes de Shannon si el audio es ruidoso.
+5. Reporta: capturas (envolvente+extremos, triángulos, ciclos), **#ciclos**, **RR medio**, observaciones, falsos ± y cómo los mitigaste.
 
 
 ---
